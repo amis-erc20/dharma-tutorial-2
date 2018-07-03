@@ -3,13 +3,13 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
-        "@dharmaprotocol/dharma.js": "0.1.9",
+        "@dharmaprotocol/dharma.js": "0.1.10",
         "react": "^16.4.1",
         "react-dom": "^16.4.1",
         "react-scripts": "1.1.4"
     },
     "devDependencies": {
-        "dharma-chain": "^1.0.6"
+        "dharma-chain": "1.0.8"
     },
     "scripts": {
         "blockchain": "dharma-chain",
