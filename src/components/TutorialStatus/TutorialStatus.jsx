@@ -6,11 +6,11 @@ import "./TutorialStatus.css";
 
 export default class TutorialStatus extends Component {
     render() {
-        const { debtOrder, balances } = this.props;
+        const { loanRequest, balances } = this.props;
 
         return (
             <div className="TutorialStatus">
-                <LoanSummary debtOrder={debtOrder} />
+                <LoanSummary loanRequest={loanRequest} />
                 <Balances balances={balances} />
             </div>
         );

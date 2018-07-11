@@ -6,9 +6,16 @@ import "./Tutorials.css";
 
 export default class Tutorials extends Component {
     render() {
-        const { createDebtOrder, debtOrder, dharma, isAwaitingBlockchain, updateBlockchainStatus } = this.props;
+        const {
+            createLoanRequest,
+            fillLoanRequest,
+            loanRequest,
+            dharma,
+            isAwaitingBlockchain,
+            updateBlockchainStatus
+        } = this.props;
 
-        const disableOpenForm = isAwaitingBlockchain || debtOrder;
+        const disableOpenForm = isAwaitingBlockchain || loanRequest;
 
         return (
             <div>
@@ -16,10 +23,15 @@ export default class Tutorials extends Component {
                     className="Tutorial"
                     disableForm={disableOpenForm}
                     dharma={dharma}
-                    debtOrder={debtOrder}
-                    createDebtOrder={createDebtOrder}
+                    loanRequest={loanRequest}
+                    createLoanRequest={createLoanRequest}
                 />
-                <Fill className="Tutorial" debtOrder={debtOrder} updateBlockchainStatus={updateBlockchainStatus} />
+                <Fill
+                    className="Tutorial"
+                    fillLoanRequest={fillLoanRequest}
+                    loanRequest={loanRequest}
+                    updateBlockchainStatus={updateBlockchainStatus}
+                />
             </div>
         );
     }

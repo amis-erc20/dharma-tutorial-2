@@ -8,24 +8,24 @@ export default class LoanSummary extends Component {
 
         this.state = {
             isFilled: false,
-            isCreated: false,
+            isCreated: false
         };
     }
 
     componentWillReceiveProps(nextProps) {
-        const { debtOrder } = nextProps;
+        const { loanRequest } = nextProps;
 
-        if (!debtOrder) {
+        if (!loanRequest) {
             return {};
         }
 
-        this.getLoanSummary(debtOrder).then((data) => {
+        this.getLoanSummary(loanRequest).then(data => {
             this.setState(data);
         });
     }
 
-    async getLoanSummary(debtOrder) {
-        const isFilled = await debtOrder.isFilled();
+    async getLoanSummary(loanRequest) {
+        const isFilled = await loanRequest.isFilled();
 
         return { isFilled, isCreated: true };
     }
@@ -38,22 +38,22 @@ export default class LoanSummary extends Component {
 
         return (
             <div>
-                <h3>Loan Summary</h3>
+                <h3>Loan Request Summary</h3>
 
                 <table className="table table-bordered table-hover">
                     <tbody>
-                    <tr>
-                        <th>Created</th>
-                        <td className="check-box-row">
-                            <i className={`summary-check fa fa-${isCreated ? successClass : dangerClass }`}/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Filled</th>
-                        <td className="check-box-row">
-                            <i className={`summary-check fa fa-${isFilled ? successClass : dangerClass}`}/>
-                        </td>
-                    </tr>
+                        <tr>
+                            <th>Created</th>
+                            <td className="check-box-row">
+                                <i className={`summary-check fa fa-${isCreated ? successClass : dangerClass}`} />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Filled</th>
+                            <td className="check-box-row">
+                                <i className={`summary-check fa fa-${isFilled ? successClass : dangerClass}`} />
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

@@ -19,7 +19,7 @@ export default class Fill extends Component {
     async handleAllowPrincipalTransfer(event) {
         event.preventDefault();
 
-        const { debtOrder } = this.props;
+        const { loanRequest } = this.props;
 
         /*
          * Step 4:
@@ -33,10 +33,10 @@ export default class Fill extends Component {
     }
 
     render() {
-        const { debtOrder, updateBlockchainStatus } = this.props;
+        const { fillLoanRequest, loanRequest, updateBlockchainStatus } = this.props;
         const { hasGrantedTransfer } = this.state;
 
-        const disableAllowTransfer = !debtOrder || hasGrantedTransfer;
+        const disableAllowTransfer = !loanRequest || hasGrantedTransfer;
 
         return (
             <div className="FillTutorial container Tutorial" id="fill-loan">
@@ -46,12 +46,13 @@ export default class Fill extends Component {
 
                 <AllowPrincipalTransfer
                     handleAllowPrincipalTransfer={this.handleAllowPrincipalTransfer}
-                    debtOrder={debtOrder}
+                    loanRequest={loanRequest}
                     disabled={disableAllowTransfer}
                 />
 
                 <FillLoan
-                    debtOrder={debtOrder}
+                    fillLoanRequest={fillLoanRequest}
+                    loanRequest={loanRequest}
                     disabled={!hasGrantedTransfer}
                     updateBlockchainStatus={updateBlockchainStatus}
                 />

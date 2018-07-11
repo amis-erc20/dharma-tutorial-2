@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 
-import { creditorAddress } from "../../constants";
-
 export class FillLoan extends Component {
     constructor(props) {
         super(props);
@@ -12,16 +10,9 @@ export class FillLoan extends Component {
     async handleFillLoan(event) {
         event.preventDefault();
 
-        const { debtOrder, updateBlockchainStatus } = this.props;
+        const { fillLoanRequest, updateBlockchainStatus } = this.props;
 
-        /*
-         * Step 5:
-         * With the principal and collateral permissions enabled, the last step
-         * is to actually call fill on the loan order:
-         */
-
-        // your code here
-
+        await fillLoanRequest();
         await updateBlockchainStatus();
     }
 

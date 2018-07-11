@@ -22,7 +22,8 @@ export default class App extends Component {
             balances: {}
         };
 
-        this.createDebtOrder = this.createDebtOrder.bind(this);
+        this.createLoanRequest = this.createLoanRequest.bind(this);
+        this.fillLoanRequest = this.fillLoanRequest.bind(this);
         this.updateBlockchainStatus = this.updateBlockchainStatus.bind(this);
     }
 
@@ -31,7 +32,7 @@ export default class App extends Component {
     }
 
     async updateBlockchainStatus() {
-        const { debtOrder } = this.state;
+        const { loan } = this.state;
 
         const repAddress = await dharma.contracts.getTokenAddressBySymbolAsync("REP");
         const wethAddress = await dharma.contracts.getTokenAddressBySymbolAsync("WETH");
@@ -42,9 +43,13 @@ export default class App extends Component {
         const creditorREP = await dharma.token.getBalanceAsync(repAddress, creditorAddress);
         const creditorWETH = await dharma.token.getBalanceAsync(wethAddress, creditorAddress);
 
-        const collateralizerREP = debtOrder ? await debtOrder.getCurrentCollateralAmount() : 0;
         // WETH never gets collateralized in this example.
         const collateralizerWETH = 0;
+
+        let collateralizerREP = 0;
+        if (loan) {
+            collateralizerREP = await loan.getCurrentCollateralAmount();
+        }
 
         this.setState({
             balances: {
@@ -70,12 +75,12 @@ export default class App extends Component {
         });
     }
 
-    async createDebtOrder(formData) {
+    async createLoanRequest(formData) {
         this.setState({
             isAwaitingBlockchain: true
         });
 
-        const { DebtOrder } = Dharma.Types;
+        const { LoanRequest } = Dharma.Types;
 
         const { principal, collateral, termLength, interestRate } = formData;
 
@@ -92,7 +97,7 @@ export default class App extends Component {
         const debtorAddressString = accounts[0];
 
         try {
-            const debtOrder = await DebtOrder.create(dharma, {
+            const loanRequest = await LoanRequest.create(dharma, {
                 principalAmount: principal,
                 principalToken: "WETH",
                 collateralAmount: collateral,
@@ -119,20 +124,51 @@ export default class App extends Component {
 
             this.setState({
                 isAwaitingBlockchain: false,
-                debtOrder
+                loanRequest
             });
         } catch (e) {
             console.error(e);
 
             this.setState({
                 isAwaitingBlockchain: false,
-                debtOrder: null
+                loanRequest: null
+            });
+        }
+    }
+
+    async fillLoanRequest() {
+        this.setState({
+            isAwaitingBlockchain: true
+        });
+
+        const { loanRequest } = this.state;
+
+        try {
+            /*
+             * Step 5:
+             * With the principal and collateral permissions enabled, the last step
+             * is to actually call fill on the loan order:
+             */
+
+            // your code here
+
+            const loan = await loanRequest.generateLoan();
+
+            this.setState({
+                isAwaitingBlockchain: false,
+                loan
+            });
+        } catch (e) {
+            console.error(e);
+
+            this.setState({
+                isAwaitingBlockchain: false
             });
         }
     }
 
     render() {
-        const { balances, debtOrder, isAwaitingBlockchain } = this.state;
+        const { balances, loanRequest, isAwaitingBlockchain } = this.state;
 
         return (
             <div className="App">
@@ -142,8 +178,9 @@ export default class App extends Component {
                     <div className="row">
                         <div className="col-sm-7">
                             <Tutorials
-                                createDebtOrder={this.createDebtOrder}
-                                debtOrder={debtOrder}
+                                createLoanRequest={this.createLoanRequest}
+                                fillLoanRequest={this.fillLoanRequest}
+                                loanRequest={loanRequest}
                                 dharma={dharma}
                                 isAwaitingBlockchain={isAwaitingBlockchain}
                                 updateBlockchainStatus={this.updateBlockchainStatus}
@@ -151,7 +188,7 @@ export default class App extends Component {
                         </div>
 
                         <div className="col-sm-5">
-                            <TutorialStatus balances={balances} debtOrder={debtOrder} />
+                            <TutorialStatus balances={balances} loanRequest={loanRequest} />
                         </div>
                     </div>
                 </div>

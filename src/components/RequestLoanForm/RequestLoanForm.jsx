@@ -33,7 +33,7 @@ export class RequestLoanForm extends Component {
     async handleSubmit(event) {
         event.preventDefault();
 
-        await this.props.createDebtOrder(this.state);
+        await this.props.createLoanRequest(this.state);
     }
 
     render() {
