@@ -9,7 +9,7 @@
         "react-scripts": "1.1.4"
     },
     "devDependencies": {
-        "dharma-chain": "1.0.8"
+        "dharma-chain": "1.0.9"
     },
     "scripts": {
         "blockchain": "dharma-chain",
