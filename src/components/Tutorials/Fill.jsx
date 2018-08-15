@@ -27,7 +27,7 @@ export default class Fill extends Component {
          * the lender will also need to authorize the transfer of the principal:
          */
 
-        // your code here
+        await loanRequest.allowCollateralTransfer(debtorAddress)
 
         this.setState({ hasGrantedTransfer: true });
     }

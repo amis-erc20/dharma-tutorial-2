@@ -34,42 +34,42 @@ export default class App extends Component {
     async updateBlockchainStatus() {
         const { loan } = this.state;
 
-        const repAddress = await dharma.contracts.getTokenAddressBySymbolAsync("REP");
+        const amisAddress = await dharma.contracts.getTokenAddressBySymbolAsync("AMIS");
         const wethAddress = await dharma.contracts.getTokenAddressBySymbolAsync("WETH");
 
-        const debtorREP = await dharma.token.getBalanceAsync(repAddress, debtorAddress);
+        const debtorAMIS = await dharma.token.getBalanceAsync(amisAddress, debtorAddress);
         const debtorWETH = await dharma.token.getBalanceAsync(wethAddress, debtorAddress);
 
-        const creditorREP = await dharma.token.getBalanceAsync(repAddress, creditorAddress);
+        const creditorAMIS = await dharma.token.getBalanceAsync(amisAddress, creditorAddress);
         const creditorWETH = await dharma.token.getBalanceAsync(wethAddress, creditorAddress);
 
         // WETH never gets collateralized in this example.
         const collateralizerWETH = 0;
 
-        let collateralizerREP = 0;
+        let collateralizerAMIS = 0;
         if (loan) {
-            collateralizerREP = await loan.getCurrentCollateralAmount();
+            collateralizerAMIS = await loan.getCurrentCollateralAmount();
         }
 
         this.setState({
             balances: {
-                debtorREP: debtorREP
-                    .div(10 ** 18)
+                debtorAMIS: debtorAMIS
+                    .div(10 ** 9)
                     .toNumber()
                     .toLocaleString(),
                 debtorWETH: debtorWETH
                     .div(10 ** 18)
                     .toNumber()
                     .toLocaleString(),
-                creditorREP: creditorREP
-                    .div(10 ** 18)
+                creditorAMIS: creditorAMIS
+                    .div(10 ** 9)
                     .toNumber()
                     .toLocaleString(),
                 creditorWETH: creditorWETH
                     .div(10 ** 18)
                     .toNumber()
                     .toLocaleString(),
-                collateralizerREP,
+                collateralizerAMIS,
                 collateralizerWETH
             }
         });
@@ -101,7 +101,7 @@ export default class App extends Component {
                 principalAmount: principal,
                 principalToken: "WETH",
                 collateralAmount: collateral,
-                collateralToken: "REP",
+                collateralToken: "AMIS",
                 interestRate: interestRate,
                 termDuration: termLength,
                 termUnit: "months",
@@ -120,7 +120,7 @@ export default class App extends Component {
              * Allow the collateral to be transferred from the borrower to the Dharma Protocol smart contract.
              */
 
-            // your code here
+            await loanRequest.allowCollateralTransfer(debtorAddress)
 
             this.setState({
                 isAwaitingBlockchain: false,

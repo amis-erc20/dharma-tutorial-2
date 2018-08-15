@@ -11,7 +11,7 @@ export class FillLoan extends Component {
         event.preventDefault();
 
         const { fillLoanRequest, updateBlockchainStatus } = this.props;
-
+        await loanRequest.fill(creditorAddress);
         await fillLoanRequest();
         await updateBlockchainStatus();
     }
